@@ -12,5 +12,5 @@ Included in this repository are the project proposal, data appendix and project 
 Language of focus: R
 
 # Project Instructions
-(as stated by professor)
+(As stated by the professor)
 You will conduct a statistical study on a topic of your choice. This task will require you to write a project proposal, acquire and analyze relevant data, present your results orally to the class, and hand in a written report describing your study and its findings. Your project must involve fitting a multiple regression model. The project is an opportunity to show off what you’ve learned about data analysis, visualization, and statistical inference. It is a major component of the class, and successful completion is required to pass.
