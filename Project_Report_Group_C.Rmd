@@ -1,0 +1,359 @@
+---
+title: "Facebook or FAKEbook?"
+author: "Group C: Lauryn Aliwalas, Xela Miller, Tiffany Xiao"
+date: "December 15, 2017"
+output: oilabs::lab_report
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=TRUE, warning = FALSE, message = FALSE}
+library(dplyr)
+library(ggplot2)
+library(oilabs)
+library(readr)
+library(plyr)
+library(mosaic)
+facebook <- read_csv("group-C-data.csv")
+```
+
+* * *
+# Abstract
+Facebook is a very popular website that offers a wide array of services and content, including news posts that serve to update their users on many topics such as politics. With a broad audience of over two billion users, it is important to consider the quality of the information that is spread on Facebook. We conducted a multiple regression analysis to investigate which characteristics of Facebook news posts might influence the number of times the post will be shared. Through backward selection, our final model determined that number of comments, a negative fact check rating (mostly false or no factual content), a visual post type (photo or video), and a left political affiliation significantly increased the number of times a post would be shared. These results shed light on the impending threat of fake news on our society and calls for Facebook to consider methods that minimize the spread of false information. 
+
+# Introduction
+With over 2 billion active monthly users (Titcomb 2017), Facebook has become a widely popular social media site that has expanded its available resources to its internet community. With so many active users, it is expected that every individual will differ in age, interests and political affiliation, which all contributes to diverse information and opinions circulating on the site. On a daily basis, this audience is receiving information and choosing to spread it further by “sharing” a post with their immediate friend group or to another public group. "Sharing" is a function on Facebook that allows users to promote a post on their profile. <br><br>
+
+However, for many of these 2 billion users, Facebook is a primary news source. This could be concerning if the information being shared is not factually correct or representative of the diverse community. For example, during events such as the presidential election, Facebook may be facilitating the spread of inaccurate representations of candidates or poignant events, which can ultimately influence the way Facebook users vote. Facebook holds a lot of power in this aspect and should constantly be considering approaches that positively influence their community of users. <br><br>
+
+In an effort to determine which post characteristics most influence share count, we analyzed Facebook news posts and four traits of all the posts using a multiple regression model. This form of analysis should alert us to which of the included post characteristics significantly influence the number of shares. Specifically, we sought to determine: <br><br><center> [Question Motivating Analysis:] <b> How does the type of post, number of comments, political category, and/or fact check rating have an effect on the number of times a news post will be shared on Facebook. </b></center><br> 
+
+The action of “sharing” a post is an integral way for information to be spread on Facebook. When someone shares a post, it is a direct way of circulating information to friends and other users on Facebook. This aspect of a post is a good indicator of its popularity among the Facebook community and may give insight as to how many users may be exposed to that information. We expect that share count of a post may be a response to post traits such as number of comments, type of post, political affiliation of the page that posted the information, and fact check rating of the post. <br><br>
+
+In comparison to sharing, commenting on a post is more of an indirect way to disperse information. In some cases, the comment of a user may cause the post to show up in the newsfeeds of their friends. This is another way posts gain more views and popularity. We are interested in observing any correlation between the amount of shares and comments on Facebook posts. However, we do expect that higher volumes of comments will positively influence share count. <br><br>
+
+We expect the four types of posts (video, link, photo, text) to differ in their relationship to the share count of a post regarding the immediate availability of the information. Photos may be more prone to being shared because they provide immediate information and may grab more attention. Links usually force users to an external site, which many users may not enjoy (which may be due to various reasons such as security concerns), possibly resulting in links being shared less. Videos, although a visual source of information, take time to watch completely. Thus, we might expect videos to not have a large positive influence on the number of shares of a post. Text is not a visual source of information and can seem inconvenient or lengthy at times. As a result, we would expect text to also not have a large positive influence on the number of shares of a post. Overall, we would expect a photo post to be shared more than videos, links and text posts. If our research finds that certain post types are more likely to be shared, this can be used by Facebook and/or third party advertisers and post-makers as a means of spreading their information in the most effective way. It is important for Facebook to understand the preferences of their users and mediate routes for the information that most benefits their audience. <br><br>
+
+Additionally, we would like to look at which political affiliation of the posts are more likely to be shared. We do not expect any significant differences between these factors because of the wide diversity of Facebook users and their political ideology. <br><br>
+
+We are also exploring if fact check rating (how factually correct the post is) can explain share count. In some cases, false information can be outlandish and draw more attention because it is more interesting. This may cause Facebook users to be more prone to sharing that information versus information that is factually true and possibly not as compelling. If Facebook posts that are less factually correct are being viewed and shared more often, this could be detrimental to future decisions and opinions formed by people who rely heavily on Facebook for news. <br><br>
+
+It is important to analyze how these variables may influence the number of times a post is shared, especially in the case of fact check rating. In the event that our model reveals that less factually correct posts are more often shared, this is important information for both Facebook and its users to have access to. It would be crucial for the company to brainstorm and decide how they can efficiently filter posts created by sources on their site so they do not become affiliated with “fake news.” If fact check rating is found to not have a great impact on share count, Facebook might consider continuing to analyze their posts on a regular basis, as a way to constantly be aware of any negative influences on news circulation. News spreads fast, so the site should not want to support any false information around the world. Overall, our research intends to initiate a conversation about what our current society values in posts and the implications these valued features may have on important decisions and the future of our society. <br><br>
+
+# Data 
+The dataset used in this research project is a dataframe collected by Buzzfeed News for use in a report published on October 20, 2016, which analyzed political Facebook posts from 9 hyperpartisan news organizations (Silverman 2016). The dataset was found on GitHub (source: https://github.com/BuzzFeedNews/2016-10-facebook-fact-check). It contains 12 variables, 5 of which were used in our analysis. <br><br>
+
+The 4 explanatory variables utilized in our analyses are comment count, post type, rating, and category. Comment count (`comment_count`) is a discrete numerical variable measuring the comments on one post; each comment is one unit. Post type (`Post.Type`) is a categorical variable that refers to the format of the post. It contains 4 levels: text, link, photo, or video. Rating (`Rating`) is a categorical variable that measures the factual content of a post. The levels of rating are mostly true, mostly false, mixture of true and false, and no factual content. Category (`Category`) is a categorical variable that indicates whether the news organization who published a post is mainstream, left, or right (it has 3 levels: mainstream, left or right).  <br><br>
+
+The response variable is share count (`share_count`). Share count is a discrete numerical variable and measures the amount of shares on a post. Each share on a post counts as one unit of share count. <br><br>
+
+The population of interest is all published news posts on Facebook of which there are at least thousands of (Noyes 2017). The sample is the 2211 posts published by news organizations, as collected by BuzzfeedNews. Each individual post represents one case. <br><br>
+
+For the purposes of this project, modifications were made to the dataframe before starting our analyses. All cases with NA values for share_count were removed from the dataframe, leaving 2209 observations for our analyses. The numerical variables `share_count` and `comment_count` were logarithmically transformed so that the entire distribution could be visualized. <br><br>
+
+Exploratory analyses of the data, such as summary statistics and visualizations of the variables, were conducted to ensure that the data had the correct dimensions, and that there were no abnormalities in the data.
+
+## Distribution of Numerical Variables
+
+### Share Count
+Based on the density histogram of `share_count_ln`, we determined that the distribution of share count appears nearly normal. There appears to be a slight right skew, but since we have more than 30 observations the skew is negligible. 
+```{r, message=FALSE, warning=FALSE}
+#Calculate mean and standard deviation of share_count_ln
+share_count_mean <- mean(~share_count_ln, data=facebook)
+share_count_sd <- sd(~share_count_ln, data=facebook)
+
+#Density histogram of share_count_ln
+qplot(x=share_count_ln, data=facebook, main="Distribution of Share Count ", xlab="Share Count", geom="blank") + 
+  geom_histogram(aes(y=..density..)) +
+  stat_function(fun=dnorm, args = c(mean=share_count_mean, sd=share_count_sd), col="tomato")
+```
+
+### Comment Count
+Based on the density histogram of `comment_count_ln`, we determined that the distribution of comment count appears nearly normal.
+```{r, message=FALSE, warning=FALSE}
+#Calculate mean and standard deviation of comment_count_ln
+comment_count_mean <- mean(~comment_count_ln, data=facebook)
+comment_count_sd <- sd(~comment_count_ln, data=facebook)
+
+#Distribution of comment_count_ln
+qplot(x=comment_count_ln, data=facebook, main="Distribution of Comment Count", xlab="Comment Count", geom="blank") + 
+  geom_histogram(aes(y=..density..)) +
+  stat_function(fun=dnorm, args = c(mean=comment_count_mean, sd=comment_count_sd), col="tomato")
+```
+
+## Distribution of Categorical Variables
+Normality of the categorical variables - post type, rating, and category - was examined by looking at boxplots showing the distributions of each variable. Although there is some skew and outliers, the medians for each category's sublevels appear to be in the middle of the distribution, so the data is nearly normal.
+
+### Post Type
+```{r, message=FALSE, warning=FALSE}
+#Distribution of Post Type
+qplot(x=Post.Type, y=share_count_ln, data=facebook, main="Distribution of Post Type", xlab="Post Type", geom="boxplot")
+```
+
+### Rating
+```{r, message=FALSE, warning=FALSE}
+#Distribution of Rating
+qplot(x=Rating, y=share_count_ln, data=facebook, main="Distribution of Rating", xlab="Rating", geom="boxplot")
+```
+
+### Category
+```{r, message=FALSE, warning=FALSE}
+#Distribution of Category
+qplot(x=Category, y=share_count_ln, data=facebook, main="Distribution of Category", xlab="Category", geom="boxplot")
+```
+
+# Methods
+Since our research question focuses on how <b> the type of post, number of comments, political category, content and/or fact check rating effect the number of times a news story post will be shared on Facebook</b>, we will utilize multiple regression to predict share count with our four explanatory variables (comment count, post type, rating and category). Multiple regression is ideal for our analyses since we are attempting to predict the value of a variable (share count) based on the value of two or more variables (comment count, post type, rating and category). <br><br>
+
+## 1. Check L.I.N.E. Conditions for Regression
+In order to utilize multiple regression, we must first check L.I.N.E. conditions for regression (<b>L</b>inearity in the data, <b>I</b>ndependence of observations, <b>N</b>ormality of residuals and <b>E</b>qual variance of residuals). <br><br> 
+
+## 2. Create the Initial Multiple Linear Regression Model
+If the conditions are met, we will create an initial multiple linear regression (MLR) model with `share_count_ln` as our response variable, and `comment_count_ln`, `Post.Type`, `Rating` and `Category`as our explanatory variables. 
+
+## 3. Choose the Best Model with Backwards Selection
+After creating our initial MLR model, we will refine our model by utilizing the backwards selection technique to select our most significant predictors/variables for a final model. The backwards selection technique consists of starting with a model with all the variables of interest (this is our initial MLR model), and then repeatedly removing the least significant variable and refitting the model until all remaining variables in the model are statistically significant (our project utilizes a significance level of 0.05).
+
+## 4. Check L.I.N.E. Conditions for Best Model
+Once we have created our best model with backwards selection, we will check that the predictors/variables in our best model still meet the L.I.N.E. conditions. 
+
+# Results
+## Check L.I.N.E. Conditions for Regression
+### Linearity
+The scatterplot of `comment_count_ln` versus `share_count_ln` shows a moderate/strong, positive and linear relationship between the variables. The residuals versus fitted values plot from our model and the residuals versus comment count plot show that the residuals have no clear pattern. Thus, although there are some outliers, our plots show that the data meets the linearity condition for regression.
+```{r, message = FALSE, warning = FALSE}
+#Scatterplot of comment_count_ln versus share_count_ln
+qplot(x=comment_count_ln, y=share_count_ln, data=facebook, main="Comment Count vs. Share Count", xlab="Comment Count", ylab="Share Count")
+
+#Residuals verus fitted values plot
+#Note: In order to obtain residual and fitted values of our model, we must generate our model first
+model <- lm(share_count_ln ~ Post.Type + comment_count_ln + Category + Rating, data = facebook)
+rvf_plot <- qplot(x=.fitted, y=.resid, data=model, main="Residuals vs. Fitted Values", xlab="Fitted values", ylab="Residuals") +
+  geom_hline(yintercept=0, linetype="dashed")
+rvf_plot
+
+#Residuals versus comment_count_ln (numerical explanatory variable) plot
+rvc_plot <- qplot(x=comment_count_ln, y=.resid, data=model, main="Residuals vs. Comment Count", xlab="Comment Count", ylab="Residuals") +
+  geom_hline(yintercept=0, linetype="dashed")
+rvc_plot
+```
+
+### Independence
+This condition is met because the sample (our dataset which has 2209 observations) is less than 10% of the total population (all Facebook news posts - of which there are at least thousands of, as previously stated [Noyes 2017]).
+
+### Normality of Residuals
+The QQ plot of the residuals shows that the residuals appear to be somewhat normal in the middle of the plot. There are quite a few outliers at both ends of the plot. We also plotted a histogram of the residuals to more thoroughly examine the normality of the residuals. The histogram reveals that the residuals are nearly normal, although it has a left skew. Since we have more than 30 observations, this skew is negligble. The normality of residuals condition is met.
+```{r, message = FALSE, warning = FALSE}
+#QQ plot of residuals
+qplot(sample=.resid, data=model, stat="qq", main="QQ Plot of Residuals")
+
+#Histogram of residuals
+hist(model$residuals, main="Histogram of Residuals", xlab="Residuals")
+```
+
+### Equal Variance of Residuals
+The plot of the residuals versus comment count, the plot of the residual versus fitted values and the boxplots of residuals versus each categorical variable all show that the residuals are close to zero (aside from the outliers). They also show that there are no major differences between expected and observed values. Thus, these plots show that there is constant variability, thus the equal variance of residuals condition is met. 
+```{r, message = FALSE, warning = FALSE}
+#Recall residual vs. fitted values plot of our model and residual vs. comment count plot that were created earlier
+rvf_plot
+rvc_plot
+
+#Boxplots of residuals v. each categorical variable
+qplot(x=Post.Type, y=.resid, data=model, geom = "boxplot", main="Residuals Boxplot of Post Type") +
+  geom_hline(yintercept=0, linetype="dashed") +
+  xlab("Post Type") +
+  ylab("Residuals")
+
+qplot(x=Rating, y=.resid, data=model, geom = "boxplot", main="Residuals Boxplot of Rating") +
+  geom_hline(yintercept=0, linetype="dashed") +
+  xlab("Rating") +
+  ylab("Residuals")
+
+qplot(x=Category, y=.resid, data=model, geom = "boxplot", main="Residuals Boxplot of Category") +
+  geom_hline(yintercept=0, linetype="dashed") +
+  xlab("Category") +
+  ylab("Residuals")
+
+```
+
+## Create the Initial Multiple Linear Regression Model
+Now that we have checked the L.I.N.E. conditions for regression and have confirmed that the conditions are met, we can create our initial multiple linear regression model. <br><br>
+Based on the coefficients from the summary statistics of our model, we can identify the equation of the line for our model:
+```{r}
+#Recall that while testing for the L.I.N.E. conditions, we created our multiple linear regression model
+#Here is the code to create our MLR model again: 
+#model <- lm(share_count_ln ~ Post.Type + comment_count_ln + Category + Rating, data = facebook)
+summary(model)
+```
+
+### Equation of the Line
+Share Count = 1.80626 + 1.08371(Post Type: Photo) + -1.44644(Post Type: Text) + 0.11851(Post Type: Video) + 0.93748(Comment Count) + -2.26945(Category: Mainstream) + -0.24882(Category: Right) + 0.20935(Rating: Mostly False) + -0.31134(Rating: Mostly True) + -0.28360(Rating: No Factual Content)
+
+### Significance of Variables
+Using a significance level of 0.05, `Post.Typephoto`, `Post.Typetext`, `comment_count_ln`, `Categorymainstream`, `Categoryright`, `Ratingmostly true`, and `Ratingno factual content` are all statistically significant due to their p-value being less than 0.05. The most statistically significant variables appear to be  `Post.Typephoto`, `comment_count_ln` and `Categorymainstream`, as their p-values are all less than 2e-16. Since a variable being statistically significant indicates that the variable likely has an influence on the share count,  `Post.Typephoto`, `Post.Typetext`, `comment_count_ln`, `Categorymainstream`, `Categoryright`, `Ratingmostly true`, and `Ratingno factual content`all likely influence the share count. In other words, changes in these variables' values are likely related to changes in the share count. <br><br>
+Conversely, the insignificant or not statistically significant variables (variables with p-values greater than 0.05) likely do not influence the share count. Our summary statistics for our model indicate that `Post.Typevideo` and `Ratingmostly false` are not statistically significant, thus changes in these variables' values are likely not related to changes in the share count.
+
+### Interpreting the Coefficients
+<b>Coefficient of [Post.Typephoto]: [1.08371]</b> <br>
+With all other variables fixed, for each change of 1 unit in [Post.Typephoto], share count [increases] by [1.08371]. <br><br>
+
+<b>Coefficient of [Post.Typetext]: [-1.44644]</b> <br>
+With all other variables fixed, for each change of 1 unit in [Post.Typetext], share count [decreases] by [1.44644]. <br><br>
+
+<b>Coefficient of [comment_count_ln]: [0.93748]</b> <br>
+With all other variables fixed, for each change of 1 unit in [comment_count_ln], share count [increases] by [0.93748]. <br><br>
+
+<b>Coefficient of [Categorymainstream]: [-2.26945]</b> <br>
+With all other variables fixed, for each change of 1 unit in [Categorymainstream], share count [decreases] by [2.26945]. <br><br>
+
+<b>Coefficient of [Categoryright]: [-0.24882]</b> <br>
+With all other variables fixed, for each change of 1 unit in [Categoryright], share count [decreases] by [0.24882]. <br><br>
+
+<b>Coefficient of [Ratingmostly true]: [-0.31134]</b> <br>
+With all other variables fixed, for each change of 1 unit in [Ratingmostly true], share count [decreases] by [0.31134]. <br><br>
+
+<b>Coefficient of [Ratingno factual content]: [-0.28360]</b> <br>
+With all other variables fixed, for each change of 1 unit in [Ratingno factual content], share count [decreases] by [0.28360]. <br><br>
+
+### Adjusted R-Squared Value
+The adjusted r-squared value for our model obtained from the summary statistics is approximately 75%. This means approximately 75% of the variability found in the share count can be explained by the explanatory variables. 
+
+## Choose the Best Model with Backwards Selection
+In order to obtain our best model, we utilized the backwards selection technique on our initial model. We built three additional models based on our initial model to obtain our best model.
+
+### Model 2
+In our initial model, the `Ratingmostly false` variable has the highest p value. The entire `Rating` variable was removed when building model 2 because only two out of the four levels of rating were statistically significant (their p-values were less than 0.05).
+```{r}
+model2 = lm(share_count_ln ~ Post.Type + comment_count_ln + Category, data = facebook)
+summary(model2)
+```
+### Model 3
+In model 2, the variable `Post.Typevideo` has the highest p-value. `Categoryright` has the second highest p-value. To address this while keeping post type as a part of our model, we consolidated the post type levels to form a new variable `PTcombined` with two levels: "visual" ("photo" and "video" levels combined) and "written" ("text" and "link" levels combined).
+```{r}
+#Revalue Post.Type levels into written and visual
+facebook$PTcombined <- revalue(facebook$Post.Type, c("link"="written", "text"="written", "photo"="visual", "video"="visual"))
+#Convert PTcombined into a factor
+facebook$PTcombined <- as.factor(facebook$PTcombined)
+facebook$PTcombined <- relevel(facebook$PTcombined, "written")
+#Build Model 3
+model3 = lm(share_count_ln ~ PTcombined + comment_count_ln + Category + Rating, data = facebook)
+summary(model3)
+```
+
+
+### Model 4 (Best Model)
+For model 4, the variable `Rating` level's have been consolidated to form a new variable `ratingcombined` with two new levels: "positive" ("mostly true" and "mixture of true and false" levels combined) and "negative" ("mostly false" and "no factual content" levels combined).<br><br>
+The result is a model where all included variables are significant, making this the best model to predict the number of shares of a Facebook news post.
+```{r}
+#Revalue Rating levels into positive and negative 
+facebook$ratingcombined <- revalue(facebook$Rating, c("mostly true"="positive", "mixture of true and false"="positive", "mostly false"="negative", "no factual content"="negative"))
+#Convert ratingcombined into a factor
+facebook$ratingcombined <- as.factor(facebook$ratingcombined)
+facebook$ratingcombined <- relevel(facebook$ratingcombined, "positive")
+#Build Model 4
+model4 = lm(share_count_ln ~ PTcombined + comment_count_ln + Category + ratingcombined, data = facebook)
+summary(model4)
+```
+
+#### Equation of the Line
+Best model equation: <br> Share Count = 1.59508 + 0.42079(Post Type: Visual) + 0.94183(Comment Count) + -2.43635(Category: Mainstream) + -0.24119(Category: right) + 0.29154(Negative Fact Check Rating)
+
+#### Significance of Variables
+In this final model, all variables remaining have a statistically significant effect on the number of shares a post will get. Visual post type and comment count have the largest positive coefficients, which indicate that they have a positive influence on the amount of shares. If a post is considered politically mainstream or right, this will decrease the amount of shares by 2.43635 or 0.24119, respectively when all other variables are fixed. In comparison to variable baselines, visual posts are more likely to get shared than written posts, political left posts will be more shared than mainstream or right posts, and negatively fact check rated posts will be more shared than positively rated posts.
+
+### Interpreting the Coefficients
+<b>Coefficient of [PTcombinedvisual]: [0.42079]</b> <br>
+With all other variables fixed, for each change of 1 unit in [PTcombinedvisual], share count [increases] by [0.42079]. <br><br>
+
+<b>Coefficient of [comment_count_ln]: [0.94183]</b> <br>
+With all other variables fixed, for each change of 1 unit in [comment_count_ln], share count [increases] by [0.94183]. <br><br>
+
+<b>Coefficient of [Categorymainstream]: [-2.43635]</b> <br>
+With all other variables fixed, for each change of 1 unit in [Categorymainstream], share count [decreases] by [2.43635]. <br><br>
+
+<b>Coefficient of [Categoryright]: [-0.24119]</b> <br>
+With all other variables fixed, for each change of 1 unit in [Categoryright], share count [decreases] by [0.24119]. <br><br>
+
+<b>Coefficient of [ratingcombinednegative]: [0.29154]</b> <br>
+With all other variables fixed, for each change of 1 unit in [ratingcombinednegative], share count [increases] by [0.29154]. <br><br>
+
+#### Adjusted R-Squared
+The adjusted r squared value (approximately 74.43%) indicates that approximately 74.43% of the variation in post share count can be explained by comment count, if the post is visual, if the post is politically mainstream or right, and if the post has a negative fact check rating.
+
+## Check L.I.N.E. Conditions for Best Model
+### Linearity
+The scatterplot of comment count against share count(our only quantitative variable in the final model) shows a somwhat linear trend. The relationship between comment count and share count appears to be positive, linear and moderately strong, with a few outliers. Thus, the linearity condition is met because the data follows a somewhat linear trend.
+```{r, messages = FALSE, warning = FALSE}
+##Scatterplot of comment_count_ln versus share_count_ln
+ggplot(facebook, aes(x=comment_count_ln, y=share_count_ln)) + geom_point()
+```
+
+### Independence
+This condition is met because the sample is less than 10% of the total population (all Facebook news posts - as stated in our previous check for independence for regression).
+
+### Normality of Residuals
+The residuals versus fitted value plot shows no true pattern and only a couple of outliers. This is also the case for the residuals versus comment count plot. Boxplots have been generated for the remaining three categorical variables in the model. All variables seem to show no drastic difference in level values, and all variables exhibit a couple of outliers. Overall, the normality of residuals condition is satisfied for all variables.
+```{r}
+###RvF plot
+qplot(x=.fitted, y=.resid, data=model4) +
+  geom_hline(yintercept=0, linetype="dashed") +
+  xlab("Fitted values") +
+  ylab("Residuals")
+
+##Residuals vs. comment_count_ln
+qplot(x=comment_count_ln, y=.resid, data=model4) +
+  geom_hline(yintercept=0, linetype="dashed") +
+  xlab("comment_count_ln") +
+  ylab("Residuals")
+
+##Residual boxplot PTcombined
+qplot(x=PTcombined, y=.resid, data=model4, geom = "boxplot") +
+  geom_hline(yintercept=0, linetype="dashed") +
+  xlab("PTcombined") +
+  ylab("Residuals")
+
+##Residual boxplot ratingcombined
+qplot(x=ratingcombined, y=.resid, data=model4, geom = "boxplot") +
+  geom_hline(yintercept=0, linetype="dashed") +
+  xlab("ratingcombined") +
+  ylab("Residuals")
+
+##Residual boxplot Category
+qplot(x=Category, y=.resid, data=model4, geom = "boxplot") +
+  geom_hline(yintercept=0, linetype="dashed") +
+  xlab("Category") +
+  ylab("Residuals")
+```
+
+### Equal Variance of Residuals
+According to the q-q plot, the data looks to not follow a normal distribution toward the left lower end of the plot. However, the histogram of the residuals shows a relatively normal distribution, with the exception of a few outliers on the left side, creating a left skew. Since we have more than 30 observations and the distribution is nearly normal, the equal variance of residuals condition is met.
+
+```{r}
+###QQ plot of residuals
+qplot(sample=.resid, data=model4, stat="qq")
+hist(model4$residuals)
+```
+
+# Discussion/Conclusion
+We found that, in response to our research question, while each variable we examined in this study seemed to have an influence on the number of shares a post will receive (at least one level of each variable was statistically significant); visual posts, comment count, political category mainstream, politicaly category right and negative fact check rating have the most influence on the number of shares a post will receive. Our best model revealed that these five explanatory variables have the most statistical significance (p-value < 0.05), which means they most influence the value of share count. <br><br>
+
+<b> Visual posts </b> being a statistically significant variable with a positive coefficient confirms our hypothesis that Facebook posts with a visual aspect to them will most likely have a positive influence on share count, possibly due to visual posts attracting users better than text or links. Advertisers on Facebook or certain groups that are trying to share their messages more can aim to reach a broader audience by utilizing visual posts instead of non-visuals. <br><br>
+
+<b> Comment count </b> being a statistically significant variable with a positive coefficient reflects our hypothesis that more comments will positively influence share count, possibly due to comments being another way to share information, and thus comments and shares should increase together. <br><br>
+
+<b> Political Category Mainstream </b> and <b> political category right </b> are both statistically significant variables with negative coefficients, which implies that Facebook posts that are mainstream (with no specific political affiliation) or right leaning are shared less often due to their political affiliation. This contradicts our earlier prediction that there would not be any significant differences between political affiliations of posts, and can have many ramifications as it also implies political posts that are left leaning perform better than right leaning or mainstream posts. News networks that are geared towards mainstream or right audiences may want to adjust their material to be more appealing to left audiences in order to obtain more shares. This can also signify that a majority of the Facebook posts with right or mainstream material are not shared as often as posts with left material, which can mean Facebook users are exposed to more left leaning political material. If left leaning posts are shared more often, then Facebook users may be more educated and influenced by left ideologies. This directly contradicts the diverse pool of information that Facebook strives to create for its users. <br><br>
+
+<b> Negative fact check rating </b> is a statistically significant variable with a positive coefficient, which suggests that posts with false information generally perform better than posts with true information. This corresponds with our hypothesis, in which we predicted that false information may be shared more often, possibly due to false information being more outlandish and attention drawing. Facebook posts that are less factually correct are being viewed and shared more often, while at the same time many people utilize Facebook as a news source. This result implies that people should not rely on Facebook as a news source to educate them on future decisions and choices, as false news is shared more often than real news. Furthermore, it implies that Facebook and its users should take a larger responsibility in filtering posts to ensure that posts about fake news are not spread and misconceived as true information. <br><br> 
+
+Although our model predicts these statistically significant variables and successfully passes the L.I.N.E. conditions, it has limitations. For example, there are quite a few unexplained outliers in our plots when testing the L.I.N.E. conditions. Further research into possible reasons for outliers and the nature of Facebook posts (such as what typically influences share count according to Facebook) can help clarify if these outliers are significant. <br><br> 
+Furthermore, our analyses are performed on a subset of political news posts on Facebook collected during a certain time period (in September 2016). It is limited since it only considers political news posts during a time period that is politically charged - specifically the controversial presidential election of 2016. This raises the question of whether or not the time period a post is posted in will also influence the share count, which we cannot observe as our observations are from the same time period. In order to truly analyze posts on Facebook in future studies, one should obtain a subset of Facebook posts that are about different types of news (technology, fashion, celebrity, etc.) and from a variety of different dates (perhaps dates across many years). <br><br> 
+
+Another limitation to our analysis is that the size of the audience of the sources of these news posts are unknown. This is a variable that we would have liked to obtain, as it can reveal very important details about the posts. For example, if a page only has an audience of around a hundred people, a post shared by the page may not receive as many shares as a page that has an audience of more than a million people. This variable definitely influences share count and should be taken into consideration when examining share count numbers for posts in future works. <br><br>
+Despite these limitations, our study still provides information pertaining to political news posts. Our study implies that the type of post, number of comments, political category and fact check rating do have an effect on the number of times a news post will be shared on Facebook - specifically visual posts, comment count and negative fact check rating have positive effects while political category mainstream and political category right have negative effects on share count. Our research intends to help start the discussion around fake news circulating on even one the most widely used social media platforms around the world. As technology continues to advance and be incorporated more into our daily lives, the threat of false information spreading is more prominent. It is important that big companies and their users become more responsible and aware of this as to eliminate any influence this information could have on decisions made in the future.
+
+# References
+1. Titcomb, James. “Facebook Now Has 2 Billion Users, Mark Zuckerberg Announces.” The Telegraph, Telegraph Media Group, 27 June 2017, www.telegraph.co.uk/technology/2017/06/27/facebook-now-has-2-billion-users-mark-zuckerberg-announces.
+2. Silverman, Craig, et al. “Hyperpartisan Facebook Pages Are Publishing False And Misleading Information At An Alarming Rate.” BuzzFeed News, BuzzFeed, www.buzzfeed.com/craigsilverman/partisan-fb-pages-analysis?utm_term=.gsz13DRKQ0#.ru3907WZXa.
+3. Noyes, Dan. “Top 20 Facebook Statistics - Updated November 2017.” Zephoria Inc., 3 Nov. 2017, zephoria.com/top-15-valuable-facebook-statistics/.

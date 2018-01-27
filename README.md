@@ -4,8 +4,8 @@ The dataset utilized in this project is forked from https://github.com/BuzzFeedN
 
 For my final project for Intro to Probability and Statistics (MTH/SDS 220), my group and I focused on fact check ratings for facebook articles. The objective of our project was to answer the question "Does the type of post, number of comments, political category, content and/or fact check rating have an effect on the number of times a news story post will be shared on Facebook?"
 
-Partners:
-Lauryn Aliwalas and Xela Miller
+Partners: Lauryn Aliwalas and Xela Miller
+(Note: Our group name was "group-c", hence the file naming conventions)
 
 Included in this repository are the project proposal, data appendix and project report.
 
