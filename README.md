@@ -1,27 +1,16 @@
-# Fact-Checking Facebook Politics Pages
+The dataset utilized in this project is forked from https://github.com/BuzzFeedNews/2016-10-facebook-fact-check.
 
-This repository contains the data and analysis for the BuzzFeed News article, "[Hyperpartisan Facebook Pages Are Publishing False And Misleading Information At An Alarming Rate](https://www.buzzfeed.com/craigsilverman/partisan-fb-pages-analysis)," published October 20, 2016.
+# About This Project
 
-## Data
+For my final project for Intro to Probability and Statistics (MTH/SDS 220), my group and I focused on fact check ratings for facebook articles. The objective of our project was to answer the question "Does the type of post, number of comments, political category, content and/or fact check rating have an effect on the number of times a news story post will be shared on Facebook?"
 
-You can find a spreadsheet of all the posts, fact-check ratings, and Facebook engagement figures [__here__](data/facebook-fact-check.csv). The methodology for collecting and rating the pages can be at the beginning and end of [the main article](https://www.buzzfeed.com/craigsilverman/partisan-fb-pages-analysis).
+Partners:
+Lauryn Aliwalas and Xela Miller
 
-The Facebook engagement figures were obtained from the Facebook API on October 11, 2016.
+Included in this repository are the project proposal, data appendix and project report.
 
-## Analysis
+Language of focus: R
 
-The full set of cross-tabulations [can be found here](notebooks/facebook-fact-check.ipynb).
-
-## Updates
-
-__2016-10-25__ • The data and cross-tabulations in this repository have been updated to reflect the following correction to the article:
-
-> Right Wing News received a median of 91 shares on its mostly true posts, and its other posts had a median of 568 shares. We originally said it had a median of 87 shares on its mostly true posts, and its other posts had a median of 521 shares. The data for Right Wing News was recalculated after we realized we had incorrectly rated three posts from that page. One post was rated mostly false that was in fact a mixture of true and false; one was rated mostly false that actually had no factual content; and one was rated mostly false that was in fact mostly true. The graphics in this story were also updated to reflect the corrected Right Wing News totals.
-
-__2016-10-28__ • The data and cross-tabulations in this repository have been updated to reflect the following correction to the article:
-
-> We subsequently corrected a fourth post from mostly false to a mixture of true and false. The graphics in this story were also updated to reflect the corrected Right Wing News totals.
-
-## Questions / Comments?
-
-Please contact Jeremy Singer-Vine at jeremy.singer-vine@buzzfeed.com.
+# Project Instructions
+(as stated by professor)
+You will conduct a statistical study on a topic of your choice. This task will require you to write a project proposal, acquire and analyze relevant data, present your results orally to the class, and hand in a written report describing your study and its findings. Your project must involve fitting a multiple regression model. The project is an opportunity to show off what you’ve learned about data analysis, visualization, and statistical inference. It is a major component of the class, and successful completion is required to pass.
